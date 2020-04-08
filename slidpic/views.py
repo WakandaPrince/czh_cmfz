@@ -14,12 +14,8 @@ def get_all_banner(request):
     """
     rows = request.GET.get('rows')
     page = request.GET.get('page')
-    # print(rows, page)
-
     pic_list = TSlidpic.objects.all().order_by('id')
-
     all_page = Paginator(pic_list, rows)
-    # print(f'总页码{all_page.num_pages}总数量{all_page.count}')
 
     # 处理最后删除当页最后一条数据
     if int(page) > all_page.num_pages:
@@ -27,7 +23,6 @@ def get_all_banner(request):
 
     # 获取第一页对象
     page_obj = Paginator(pic_list, rows).page(page).object_list
-    # print(page_obj)
     page_data = {
         'page': page,
         'total': all_page.num_pages,
@@ -44,7 +39,6 @@ def get_all_banner(request):
                     'pic': str(u.url)}
 
     data = json.dumps(page_data, default=myDefault)
-    print(data)
     return HttpResponse(data)
 
 
@@ -54,12 +48,14 @@ def add_banner(request):
     title = request.POST.get("title")
     status = request.POST.get('status')
     pic = request.FILES.get('pic')
-    print(title, status, pic)
-    print(type(pic))
-    result = TSlidpic.objects.create(url=pic,title=title,status=1)
-    print(result)
-
-    return HttpResponse()
+    print(status, title, pic)
+    try:
+        result = TSlidpic.objects.create(url=pic,title=title,status=int(status))
+        if result:
+            return HttpResponse('添加成功！')
+    except BaseException as error :
+        print(error)
+        return HttpResponse('添加失败！')
 
 
 @csrf_exempt  # 解决forbidden csrf问题

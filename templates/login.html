@@ -81,7 +81,7 @@
                         success: function (data) {
                             // 根据返回值判断是否登录成功  成功则跳转到首页
                             if (data.status === 1){
-                                location.href= '{% url 'home_index' %}'
+                                location.href = '{% url 'home_index' %}'
                             } else {
                                 alert(data.msg)
                             }
