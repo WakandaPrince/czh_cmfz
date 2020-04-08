@@ -12,17 +12,17 @@
             rowList: [3, 5, 10],
             viewrecords: true,
             editurl: "/slidpic/edit_banner/",
-            colNames: ["ID", "描述", "上传时间", "是否显示", "图片", "操作"],
+            colNames: ["ID", "描述", "是否显示","上传时间",  "图片", "操作"],
             colModel: [
                 {name: "id", align: "center", width: 50},
                 {name: "title", align: "center", editable: true},
-                {name: "upload_time", align: "center", width: 300},
                 {
                     name: "status", align: "center", editable: true,
                     edittype: "select", editoptions: {
                         value: "1:展示;0:不展示",
                     }
                 },
+                {name: "upload_time", align: "center", width: 300},
                 {
                     name: "pic", align: "center", width: 300,
                     formatter: function (cellValue) {
