@@ -45,6 +45,11 @@ def get_all_banner(request):
 
 @csrf_exempt
 def add_banner(request):
+    """
+    轮播图表添加一行数据
+    :param request: 需要添加的数据
+    :return:
+    """
     title = request.POST.get("title")
     status = request.POST.get('status')
     pic = request.FILES.get('pic')
@@ -58,8 +63,14 @@ def add_banner(request):
         return HttpResponse('添加失败！')
 
 
-@csrf_exempt  # 解决forbidden csrf问题
+@csrf_exempt
 def edit_banner(request):
+    """
+    修改、删除轮播图表中的数据
+    :param request: 当行数据、修改或者删除
+    :return:
+    """
+
     method = request.POST.get("oper")
     print(method)
     if method == 'edit':
