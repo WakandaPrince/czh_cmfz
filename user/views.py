@@ -10,13 +10,14 @@ from home.models import *
 
 def get_all_user(request):
     """
-    获取所有轮播图的相关信息并转换成json响应的前端
+    获取所有注册用户的相关信息并转换成json响应的前端
     :param request:
     :return:
     """
     rows = request.GET.get('rows')
     page = request.GET.get('page')
-    user_list = TUser.objects.all().order_by('id')
+    user_list = TUser.objects.all().order_by('user_id')
+    print(user_list)
     all_page = Paginator(user_list, rows)
 
     # 处理最后删除当页最后一条数据
@@ -34,11 +35,13 @@ def get_all_user(request):
 
     def myDefault(u):
         if isinstance(u, TUser):
-            return {"id": u.id,
-                    'title': u.title,
-                    'upload_time': u.upload_time.strftime("%Y-%m-%d %H:%M:%S"),
-                    'status': '展示' if u.status == 1 else '不展示',
-                    'pic': str(u.url)}
+            return {"id": u.user_id,
+                    'username': u.username,
+                    'nickname': u.nickname,
+                    'address': u.address,
+                    'status': '不禁用' if u.status == 1 else '禁用',
+                    'register_time': u.register_time.strftime("%Y-%m-%d %H:%M:%S"),
+                    'thumbnail': str(u.thumbnail_url)}
 
     data = json.dumps(page_data, default=myDefault)
     return HttpResponse(data)
