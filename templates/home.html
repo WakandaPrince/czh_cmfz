@@ -52,10 +52,10 @@
                         </li>
                         <li>
                             <a style="font-weight: bold;"
-                               href="javascript:$('#centerLayout').load('{% static "" %}')">用户注册趋势</a>
+                               href="javascript:$('#centerLayout').load('{% url "user:render_added_echart" %}')">用户注册趋势</a>
                         </li>
                         <li><a style="font-weight: bold;"
-                               href="javascript:$('#centerLayout').load('{% static "" %}')">用户地区分布</a>
+                               href="javascript:$('#centerLayout').load('{% url "user:render_num_map" %}')">用户地区分布</a>
                         </li>
                     </ul>
                 </div>
