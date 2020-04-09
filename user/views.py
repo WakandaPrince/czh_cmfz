@@ -161,6 +161,7 @@ def get_map_data(request):
     data = [
         {'name': '北京', 'value': 0},
         {'name': '天津', 'value': 0},
+        {'name': '广东', 'value': 0},
         {'name': '上海', 'value': 0},
         {'name': '重庆', 'value': 0},
         {'name': '河北', 'value': 0},
@@ -182,7 +183,6 @@ def get_map_data(request):
         {'name': '吉林', 'value': 0},
         {'name': '福建', 'value': 0},
         {'name': '贵州', 'value': 0},
-        {'name': '⼴东', 'value': 0},
         {'name': '⻘海', 'value': 0},
         {'name': '⻄藏', 'value': 0},
         {'name': '四川', 'value': 0},
@@ -190,11 +190,9 @@ def get_map_data(request):
         {'name': '海南', 'value': 0},
         {'name': '台湾', 'value': 0},
         {'name': '⾹港', 'value': 0},
-        # {'name': '澳⻔', 'value': Math.round(Math.random() * 1000)}
+        {'name': '澳⻔', 'value': 0}
     ]
     for i in data:
-        if TUser.objects.filter(address=i['name']):
-            i['value'] += 1
-    print(data)
-
-
+        users = TUser.objects.filter(address=i['name'])
+        i['value'] = len(users)
+    return JsonResponse(data, safe=False)
