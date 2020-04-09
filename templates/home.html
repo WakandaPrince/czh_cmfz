@@ -40,7 +40,24 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="panel-title">
-                    <a href="#" data-toggle="collapse" data-parent="#accordion"><h4>用户管理</h4></a>
+                    <a href="#bb" data-toggle="collapse" data-parent="#accordion"><h4>用户管理</h4></a>
+                </div>
+            </div>
+            <div id="bb" class="panel-collapse collapse ">
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li>
+                            <a style="font-weight: bold;"
+                               href="javascript:$('#centerLayout').load('{% static "" %}')">注册用户列表</a>
+                        </li>
+                        <li>
+                            <a style="font-weight: bold;"
+                               href="javascript:$('#centerLayout').load('{% static "" %}')">用户注册趋势</a>
+                        </li>
+                        <li><a style="font-weight: bold;"
+                               href="javascript:$('#centerLayout').load('{% static "" %}')">用户地区分布</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
