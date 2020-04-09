@@ -47,7 +47,6 @@ def get_all_user(request):
     return HttpResponse(data)
 
 
-
 @csrf_exempt
 def add_user(request):
     """
@@ -55,15 +54,24 @@ def add_user(request):
     :param request: 需要添加的数据
     :return:
     """
-    title = request.POST.get("title")
+    username = request.POST.get("username")
+    nickname = request.POST.get('nickname')
+    address = request.POST.get('address')
     status = request.POST.get('status')
-    pic = request.FILES.get('pic')
-    print(status, title, pic)
+    gender = request.POST.get('gender')
+    thumbnail = request.FILES.get('thumbnail')
+    print(status, username, nickname, address, gender, thumbnail)
     try:
-        result = TUser.objects.create(url=pic,title=title,status=int(status))
+        result = TUser.objects.create(username=username,
+                                      password=123456,
+                                      thumbnail_url=thumbnail,
+                                      nickname=nickname,
+                                      gender=gender,
+                                      address=address,
+                                      status=int(status))
         if result:
             return HttpResponse('添加成功！')
-    except BaseException as error :
+    except BaseException as error:
         print(error)
         return HttpResponse('添加失败！')
 
@@ -80,17 +88,21 @@ def edit_user(request):
     print(method)
     if method == 'edit':
         id = request.POST.get('id')
-        title = request.POST.get('title')
+        username = request.POST.get('username')
+        nickname = request.POST.get('nickname')
+        address = request.POST.get('address')
         status = request.POST.get('status')
-        print(id,title,status)
-        user = TSlidpic.objects.get(id=id)
-        user.title = title
+        print(id, username,nickname,address, status)
+        user = TUser.objects.get(user_id=id)
+        user.username = username
+        user.nickname = nickname
+        user.address = address
         user.status = status
         user.save()
         return HttpResponse('修改成功')
 
     elif method == 'del':
         id = request.POST.get('id')
-        user = TUser.objects.get(id=id)
+        user = TUser.objects.get(user_id=id)
         user.delete()
         return HttpResponse('删除成功')
