@@ -12,6 +12,8 @@
     <script src="{% static 'boot/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'jqgrid/js/trirand/src/jquery.jqGrid.js' %}"></script>
     <script src="{% static 'jqgrid/js/trirand/i18n/grid.locale-cn.js' %}"></script>
+    <script src="{% static 'echart/echarts.min.js' %}"></script>
+    <script src="{% static 'echart/china.js' %}"></script>
 
 </head>
 <body>
@@ -52,10 +54,10 @@
                         </li>
                         <li>
                             <a style="font-weight: bold;"
-                               href="javascript:$('#centerLayout').load('{% url "user:render_added_echart" %}')">用户注册趋势</a>
+                               href="javascript:$('#centerLayout').load('{% static "static_html/added_user_echart.html" %}')">用户注册趋势</a>
                         </li>
                         <li><a style="font-weight: bold;"
-                               href="javascript:$('#centerLayout').load('{% url "user:render_num_map" %}')">用户地区分布</a>
+                               href="javascript:$('#centerLayout').load('{% static 'static_html/user_num_map.html' %}')">用户地区分布</a>
                         </li>
                     </ul>
                 </div>

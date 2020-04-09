@@ -108,19 +108,6 @@ def edit_user(request):
         return HttpResponse('删除成功')
 
 
-def render_added_echart(request):
-    """
-    渲染新增用户数量ehcart网页
-    """
-    return render(request, 'added_user_echart.html')
-
-
-def render_num_map(request):
-    """
-    渲染用户数量地图
-    """
-    return render(request, 'user_num_map.html')
-
 
 def get_added_num(request):
     """
@@ -137,14 +124,11 @@ def get_added_num(request):
          '2020-04-08']
     y = [0, 0, 0, 0, 0, 0, 0]
     users = TUser.objects.filter(register_time__range=('2020-04-02', '2020-04-09'))
-    print(users)
     for user in users:
         date = user.register_time.strftime("%Y-%m-%d")
-        print(date)
         for i in x:
             if i == date:
                 y[x.index(i)] += 1
-    print(y)
     data = {
         'x': x,
         'y': y,
