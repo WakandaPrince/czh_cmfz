@@ -142,41 +142,15 @@ def get_map_data(request):
     :param request: 
     :return: 
     """
-    data = [
-        {'name': '北京', 'value': 0},
-        {'name': '天津', 'value': 0},
-        {'name': '广东', 'value': 0},
-        {'name': '上海', 'value': 0},
-        {'name': '重庆', 'value': 0},
-        {'name': '河北', 'value': 0},
-        {'name': '河南', 'value': 0},
-        {'name': '云南', 'value': 0},
-        {'name': '辽宁', 'value': 0},
-        {'name': '湖南', 'value': 0},
-        {'name': '安徽', 'value': 0},
-        {'name': '⼭东', 'value': 0},
-        {'name': '新疆', 'value': 0},
-        {'name': '江苏', 'value': 0},
-        {'name': '浙江', 'value': 0},
-        {'name': '江⻄', 'value': 0},
-        {'name': '湖北', 'value': 0},
-        {'name': '⼴⻄', 'value': 0},
-        {'name': '⽢肃', 'value': 0},
-        {'name': '⼭⻄', 'value': 0},
-        {'name': '陕⻄', 'value': 0},
-        {'name': '吉林', 'value': 0},
-        {'name': '福建', 'value': 0},
-        {'name': '贵州', 'value': 0},
-        {'name': '⻘海', 'value': 0},
-        {'name': '⻄藏', 'value': 0},
-        {'name': '四川', 'value': 0},
-        {'name': '宁夏', 'value': 0},
-        {'name': '海南', 'value': 0},
-        {'name': '台湾', 'value': 0},
-        {'name': '⾹港', 'value': 0},
-        {'name': '澳⻔', 'value': 0}
-    ]
-    for i in data:
-        users = TUser.objects.filter(address=i['name'])
-        i['value'] = len(users)
+
+    data = []
+    user_list = TUser.objects.all()
+    for i in user_list:
+        for j in range(len(data)):
+            if data[j]['name'] == i.address:
+                data[j]['value'] += 1
+                break
+        else:
+            data.append({'name': i.address, 'value': 1})
+    # print(data)
     return JsonResponse(data, safe=False)

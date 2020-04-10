@@ -1,13 +1,4 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>近七天新增用户趋势</title>
-    <script src="{% static 'boot/js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'echart/echarts.min.js' %}"></script>
 
-</head>
 <body>
 
 <div id="main" style="width: 800px;height:500px;"></div>
@@ -36,7 +27,7 @@
 
     // 发送Ajax请求获取数据
     $.ajax({
-        url: '{% url 'user:get_added_num' %}',
+        url: '/user/get_added_num/',
         datatype: 'json',
         type: 'get',
         success: function (data) {
@@ -57,4 +48,3 @@
     })
 </script>
 </body>
-</html>
