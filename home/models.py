@@ -39,14 +39,14 @@ class TArticle(models.Model):
     id = models.IntegerField(primary_key=True)
     thumbnail_url = models.CharField(max_length=100, blank=True, null=True)
     title = models.CharField(max_length=50, blank=True, null=True)
-    publish_date = models.DateTimeField(blank=True, null=True)
+    status = models.IntegerField(blank=True, null=True)
+    publish_date = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     teacher = models.ForeignKey('TTeacher', models.DO_NOTHING, blank=True, null=True)
     content = models.TextField(blank=True, null=True)
     pic_urls = models.CharField(max_length=100, blank=True, null=True)
     article_category = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 't_article'
 
 

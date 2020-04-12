@@ -1,6 +1,7 @@
 import json
 import os
 
+from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse
 from django.views.decorators.clickjacking import xframe_options_sameorigin
@@ -77,12 +78,45 @@ def add_article(request):
     content = request.GET.get('content')
     # 存到数据库中
     try:
-        # TArticle.objects.create()
-        return JsonResponse({'status': 1, 'msg':f'添加成功！'})
+        TArticle.objects.create(title=title, content=content, article_category=category)
+        return JsonResponse({'status': 1, 'msg': f'添加成功！'})
     except BaseException as error:
-        return JsonResponse({'status': 0, 'msg':f'添加失败:{error}'})
-
+        return JsonResponse({'status': 0, 'msg': f'添加失败:{error}'})
 
 
 def get_all_article(request):
+    page_num = request.GET.get('page')
+    row_num = request.GET.get('rows')
+
+    rows = []
+    article = TArticle.objects.all().order_by('id')
+    all_page = Paginator(article, row_num)
+    page = Paginator(article, row_num).page(page_num).object_list
+
+    page_data = {
+        "total": all_page.num_pages,
+        "records": all_page.count,
+        "page": page_num,
+        "rows": rows
+    }
+
+    for i in page:
+        rows.append(i)
+
+    def myDefault(u):
+        if isinstance(u, TArticle):
+            return {'id': u.id,
+                    'content': u.content,
+                    'title': u.title,
+                    'category':u.article_category,
+                    'status': u.status == 1 ,
+                    'publish_date': u.publish_date.strftime('%Y-%m-%d %H:%M:%S'),
+                    }
+
+    data = json.dumps(page_data, default=myDefault)
+
+    return HttpResponse(data)
+
+
+def edit_article(request):
     return HttpResponse()
