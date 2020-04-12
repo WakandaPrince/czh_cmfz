@@ -12,11 +12,11 @@
             rowList: [5, 10, 15],
             viewrecords: true,
             cellEdit: true,
-            colNames: ["编号", "内容", "标题", "状态", "类别", "发布时间", "操作"],
+            colNames: ["ID", "内容", "标题", "状态", "类别", "发布时间", "操作"],
             colModel: [
                 {name: "id", align: "center",width: 50},
-                {name: "content", hidden: true,},
-                {name: "title", align: "center", editable: true},
+                {name: "content", hidden: true},
+                {name: "title", align: "center", editable: true,},
                 {
                     name: "status", align: "center", editable: true,
                     edittype: "select", editoptions: {
@@ -38,9 +38,9 @@
                         else return '显密法要'
                     }
                 },
-                {name: "publish_date",},
+                {name: "publish_date",align: "center",},
                 {
-                    name: "option",
+                    name: "option", align: "center",
                     formatter: function (cellvalue, options, rowObject) {
                         var result = '';
                         result += "<a href='javascript:void(0)' onclick=\"editModel('" + rowObject.id + "')\" class='btn btn-lg' title='查看详情'> <span class='glyphicon glyphicon-th-list'>编辑</span></a>" +
@@ -93,22 +93,6 @@
 
     // 编辑文章的方法
     function editModel(id) {
-        // 获取当前行的值
-        let data = $("#articleTable").jqGrid("getRowData", id);
-        // 进行值得回显
-        $("#title").val(data.title);
-        KindEditor.html("#editor_id", data.content);
-        console.log(data.category, data.status);
-        if (data.status === '展示') {
-            $("#status").find("option[value='1']").attr("selected", true);
-        } else {
-            $("#status").find("option[value='0']").attr("selected", true);
-        }
-        if (data.category === '上师言教') {
-            $("#category").find("option[value='1']").attr("selected", true);
-        } else {
-            $("#category").find("option[value='2']").attr("selected", true);
-        }
 
         $("#myModal").modal("show");
         $("#id_div").css('display', 'block');
@@ -125,12 +109,29 @@
         });
         $("#modal_footer").html('<button type="button" class="btn btn-primary" onclick="editArticle()">保存修改</button> ' +
             '<button class="btn btn-warning" data-dismiss="modal">取消修改</button>');
-        $
+        // 获取当前行的值
+        let data = $("#articleTable").jqGrid("getRowData", id);
+        // 进行值得回显
+        $("#title").val(data.title);
+        KindEditor.html("#editor_id", data.content);
+
+        if (data.status === '展示') {
+            $("#status").find("option[value='1']").attr("selected", true);
+        } else {
+            $("#status").find("option[value='0']").attr("selected", true);
+        }
+        if (data.category === '上师言教') {
+            $("#category").find("option[value='1']").attr("selected", true);
+        } else {
+            $("#category").find("option[value='2']").attr("selected", true);
+        }
+
+
     }
 
     // 文章修改保存
     function editArticle() {
-        console.log($('#editor_id').val(),1111111111111111111);
+
         var formData = new FormData();
         formData.append('id', $('#article_id').val());
         formData.append("title", $('#title').val());
