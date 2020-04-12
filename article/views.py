@@ -76,9 +76,11 @@ def add_article(request):
     category = request.GET.get('category')
     title = request.GET.get('title')
     content = request.GET.get('content')
+    status = request.GET.get('status')
+    print(content, status)
     # 存到数据库中
     try:
-        TArticle.objects.create(title=title, content=content, article_category=category)
+        TArticle.objects.create(title=title, content=content, article_category=category, status=status)
         return JsonResponse({'status': 1, 'msg': f'添加成功！'})
     except BaseException as error:
         return JsonResponse({'status': 0, 'msg': f'添加失败:{error}'})
@@ -108,8 +110,8 @@ def get_all_article(request):
             return {'id': u.id,
                     'content': u.content,
                     'title': u.title,
-                    'category':u.article_category,
-                    'status': u.status == 1 ,
+                    'category': u.article_category,
+                    'status': u.status == 1,
                     'publish_date': u.publish_date.strftime('%Y-%m-%d %H:%M:%S'),
                     }
 
@@ -118,5 +120,28 @@ def get_all_article(request):
     return HttpResponse(data)
 
 
+@csrf_exempt
 def edit_article(request):
-    return HttpResponse()
+    method = request.POST.get("oper")
+    print(method)
+    if method == 'del':
+        id = request.POST.get('id')
+        TArticle.objects.get(id=id).delete()
+        return JsonResponse({'status': 1, 'msg': f'删除成功！'})
+    else:
+        id = request.POST.get('id')
+        category = request.POST.get('category')
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        status = request.POST.get('status')
+        print(content, id, category, title, status)
+        try:
+            article = TArticle.objects.get(id=id)
+            article.article_category = category
+            article.title = title
+            article.content = content
+            article.status = status
+            article.save()
+            return JsonResponse({'status': 1, 'msg': f'修改成功！'})
+        except BaseException as error:
+            return JsonResponse({'status': 0, 'msg': f'添加失败:{error}'})

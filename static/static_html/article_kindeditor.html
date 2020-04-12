@@ -1,8 +1,8 @@
 <script>
     $(function () {
         $("#articleTable").jqGrid({
-            url: "/article/get_all_article",
-            editurl: "/article/edit_article",
+            url: "/article/get_all_article/",
+            editurl: "/article/edit_article/",
             datatype: "json",
             styleUI: "Bootstrap",
             autowidth: true,
@@ -14,7 +14,7 @@
             cellEdit: true,
             colNames: ["编号", "内容", "标题", "状态", "类别", "发布时间", "操作"],
             colModel: [
-                {name: "id", align: "center"},
+                {name: "id", align: "center",width: 50},
                 {name: "content", hidden: true,},
                 {name: "title", align: "center", editable: true},
                 {
@@ -55,6 +55,7 @@
     // 触发添加文章的模态框
     function showAddArticle() {
         $('#myModal').modal('show');
+        $("#id_div").css('display', 'none');
         KindEditor.create("#editor_id", {
             allowFileManager: true,
             uploadJson: "/article/upload_img/",
@@ -110,6 +111,8 @@
         }
 
         $("#myModal").modal("show");
+        $("#id_div").css('display', 'block');
+        $('#article_id').val(id);
         KindEditor.create("#editor_id", {
             allowFileManager: true,
             uploadJson: "/article/upload_img/",
@@ -120,9 +123,49 @@
                 this.sync()
             }
         });
+        $("#modal_footer").html('<button type="button" class="btn btn-primary" onclick="editArticle()">保存修改</button> ' +
+            '<button class="btn btn-warning" data-dismiss="modal">取消修改</button>');
+        $
     }
 
+    // 文章修改保存
+    function editArticle() {
+        console.log($('#editor_id').val(),1111111111111111111);
+        var formData = new FormData();
+        formData.append('id', $('#article_id').val());
+        formData.append("title", $('#title').val());
+        formData.append("category", $('#category').val());
+        formData.append("content", $('#editor_id').val());
+        formData.append("status", $('#status').val());
+        $.ajax({
+            url: "/article/edit_article/",
+            type: 'post',
+            //datatype: 'json',
+            data: formData,
+            processData: false,     // 使数据不做处理
+            contentType: false,     // 不设置请求头
+            success: function (data) {
+                // 根据返回值做对应的处理 刷新表格  关闭模态框
+                if (data.status === 1) {
+                    $('#myModal').modal('hide');
+                    alert(data.msg);
+                    console.log('刷新表格');
+                    $('#articleTable').trigger("reloadGrid");
+                } else {
+                    console.log(data.msg);
+                }
+            }
+        })
+    }
 
+    // 删除
+    function delModel(id) {
+        $("#articleTable").jqGrid("delGridRow", id, {
+            height: 300,
+            reloadAfterSubmit: true
+        })
+
+    }
 </script>
 
 <ul class="nav nav-tabs">
@@ -150,15 +193,19 @@
 
             <!--模态框内容体-->
             <div class="modal-body">
-                <form action="//" class="form-horizontal"
-                      id="addArticleFrom">
+                <form action="//" class="form-horizontal" id="addArticleFrom">
+                    <div class="form-group" id="id_div" style="display: none">
+                        <label class="col-sm-1 control-label">id</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="article_id" id="article_id" class="form-control" disabled>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="col-sm-1 control-label">标题</label>
                         <div class="col-sm-5">
                             <input type="text" name="title" id="title" placeholder="请输入标题" class="form-control">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="col-sm-1 control-label">状态</label>
                         <div class="col-sm-5">
