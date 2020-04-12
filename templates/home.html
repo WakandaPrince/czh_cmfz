@@ -17,8 +17,32 @@
     <script src="{% static 'echart/china.js' %}"></script>
     <script src="{% static 'kindeditor/kindeditor-all-min.js' %}"></script>
     <script src="{% static 'kindeditor/lang/zh-CN.js' %}"></script>
-
-
+    <script>
+        KindEditor.ready(function (K) {
+            K.create('#editor_id',
+                {
+                    width: '800px',
+                    height: '300px',
+                    items: [
+                        'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
+                        'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+                        'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+                        'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
+                        'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+                        'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+                        'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+                        'anchor', 'link', 'unlink', '|', 'about'
+                    ],
+                    resizeType: 2,
+                    uploadJson: "{% url 'article:upload_img' %}",
+                    allowFileManager: true,
+                    fileManagerJson: "",
+                    afterBlur: function () {
+                    }
+                }
+            );
+        });
+    </script>
 </head>
 <body>
 
@@ -46,10 +70,10 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="panel-title">
-                    <a href="#bb" data-toggle="collapse" data-parent="#accordion"><h4>用户管理</h4></a>
+                    <a href="#aa" data-toggle="collapse" data-parent="#accordion"><h4>用户管理</h4></a>
                 </div>
             </div>
-            <div id="bb" class="panel-collapse collapse ">
+            <div id="aa" class="panel-collapse collapse ">
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked">
                         <li>
@@ -72,10 +96,10 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="panel-title">
-                    <a href="#cc" data-toggle="collapse" data-parent="#accordion"><h4>文章管理</h4></a>
+                    <a href="#bb" data-toggle="collapse" data-parent="#accordion"><h4>文章管理</h4></a>
                 </div>
             </div>
-            <div id="cc" class="panel-collapse collapse ">
+            <div id="bb" class="panel-collapse collapse ">
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked">
                         <li>
@@ -92,7 +116,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="panel-title">
-                    <a href="#" data-toggle="collapse" data-parent="#accordion"><h4>专辑管理</h4></a>
+                    <a href="#cc" data-toggle="collapse" data-parent="#accordion"><h4>专辑管理</h4></a>
                 </div>
             </div>
         </div>
@@ -101,10 +125,10 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="panel-title">
-                    <a href="#cc" data-toggle="collapse" data-parent="#accordion"><h4>轮播图管理</h4></a>
+                    <a href="#dd" data-toggle="collapse" data-parent="#accordion"><h4>轮播图管理</h4></a>
                 </div>
             </div>
-            <div id="cc" class="panel-collapse collapse ">
+            <div id="dd" class="panel-collapse collapse ">
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked">
                         <li>
@@ -159,5 +183,64 @@
         <h6 style="text-align: center">@百知教育 baizhi@zparkhr.com.cn</h6>
     </div>
 </div>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#" style="font-weight: bold">文章信息</a></li>
+    <li><a style="font-weight: bold" onclick="showAddArticle();">添加文章</a></li>
+    <div class="input-group" style="float: right;width: 30%">
+        <input type="text" id="esContent" class="form-control" placeholder="请输入搜索内容" aria-describedby="basic-addon2">
+        <span class="input-group-addon" id="basic-addon2"><a href="javascript:void(0)" id="searchES">点击搜索</a></span>
+    </div>
+</ul>
+<div class="panel panel-default">
+    <table id="articleTable"></table>
+    <div id="articlePager" style="width: auto;height: 50px"></div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:750px">
+            <!--模态框标题-->
+            <div class="modal-header">
+                <!-- 用来关闭模态框的属性:data-dismiss="modal" -->
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title">编辑用户信息</h4>
+            </div>
+
+            <!--模态框内容体-->
+            <div class="modal-body">
+                <form action="//" class="form-horizontal"
+                      id="addArticleFrom">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">标题</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="title" id="title" placeholder="请输入标题" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">分类</label>
+                        <div class="col-sm-5">
+                            <select class="form-control" name="category" id="status">
+                                <option value="1">上师言教</option>
+                                <option value="2">显密法要</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <textarea id="editor_id" name="content" style="width:700px;height:300px;">
+                            </textarea>
+                        </div>
+                    </div>
+                    <input id="addInsertImg" name="insertImg" hidden>
+                </form>
+            </div>
+            <!--模态页脚-->
+            <div class="modal-footer" id="modal_footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

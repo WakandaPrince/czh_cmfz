@@ -50,6 +50,13 @@ class TArticle(models.Model):
         db_table = 't_article'
 
 
+class ArticleImg(models.Model):
+    img_url = models.ImageField(upload_to='article_img')
+
+    class Meta:
+        db_table = "t_article_img"
+
+
 class TAudioChapter(models.Model):
     chapter_name = models.CharField(max_length=50, blank=True, null=True)
     audio_size = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)

@@ -20,4 +20,5 @@ urlpatterns = [
     path('home/', include('home.urls')),
     path('slidpic/', include('slidpic.urls')),
     path('user/', include('user.urls')),
+    path('article/', include('article.urls')),
 ]
