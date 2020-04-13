@@ -21,4 +21,5 @@ urlpatterns = [
     path('slidpic/', include('slidpic.urls')),
     path('user/', include('user.urls')),
     path('article/', include('article.urls')),
+    path('album/', include('album.urls')),
 ]
