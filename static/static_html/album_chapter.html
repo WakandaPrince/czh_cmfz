@@ -11,55 +11,59 @@
             pager: "#albumPager",
             rowNum: 2,
             rowList: [5, 10, 15],
-            rownumbers: true,
-            multiselect: true,
+            //rownumbers: true,
+            //multiselect: true,
             subGrid: true,     // 开启二级表格的使用
             subGridRowExpanded: function (subGridId, albumId) {
                 addSubGrid(subGridId, albumId);
             },
-            colNames: ["编号", "标题", "分数", "作者", "播音员", "章节数", "专辑简介", "状态", "发行时间", "上传时间", "插图"],
+            colNames: ["ID", "标题", "分数", "作者", "播音员", "章节数", "专辑简介", "状态", "发行时间", "上传时间", "插图"],
             colModel: [
-                {name: "id", hidden: true},
+                {name: "id", align: "center", width: 40,},
                 {
-                    name: "title", editable: true,
+                    name: "title", editable: true, align: "center",
                     editrules: {required: false}
                 },
                 {
-                    name: "score", editable: true,
+                    name: "score", editable: true, align: "center", width: 50,
                     editrules: {required: false, number: true, minValue: 1, maxValue: 10}
                 },
                 {
-                    name: "author",
+                    name: "author", align: "center",
                     editrules: {required: false}
                 },
                 {
-                    name: "broadcast", editable: true,
+                    name: "broadcast", editable: true, align: "center",
                     editrules: {required: false}
                 },
                 {
-                    name: "count",
+                    name: "count", align: "center", width: 70,
                     editrules: {required: false, number: true, minValue: 1}
                 },
                 {
-                    name: "brief", editable: true,
+                    name: "brief", editable: true, align: "center",
                     editrules: {required: false}
                 },
                 {
-                    name: "status", editable: true, edittype: "select",
+                    name: "status", editable: true, edittype: "select", align: "center", width: 70,
                     editoptions: {
                         value: "1:展示;0:不展示"
+                    },
+                    formatter: function (cellvalue) {
+                        if (cellvalue === 1) return '展示';
+                        else return '不展示'
                     }
                 },
                 {
-                    name: "publishDate", edittype: "date",
+                    name: "publishDate", edittype: "date", align: "center",
                     editrules: {required: false}
                 },
                 {
-                    name: "createDate", edittype: "date",
+                    name: "createDate", edittype: "date", align: "center",
                     editrules: {required: false}
                 },
                 {
-                    name: "cover", edittype: "file",
+                    name: "cover", edittype: "file", align: "center",
                     editoptions: {
                         enctype: "multipart/form-data"
                     },
@@ -80,6 +84,7 @@
         // 为二级表格的table 以及 div动态生成id
         subGridTableId = subGridId + "table";
         subGridPageId = subGridId + "pager";
+        console.log(subGridTableId);
         // 根据动态生成的id 指定html容器
         $("#" + subGridId).html(
             "<table id='" + subGridTableId + "'></table><div id='" + subGridPageId + "'></div>"
@@ -87,43 +92,87 @@
         // 根据准备好的容器去生成表格
         $("#" + subGridTableId).jqGrid({
             url: "/album/getChapterByAlbumId/?albumId=" + albumId,
+            editurl: "/album/editChapter/",
             datatype: 'json',
             styleUI: "Bootstrap",
             autowidth: true,
             pager: "#" + subGridPageId,
             caption: "章节管理",
-            rowNum: 2,
-            rowList: [2, 5, 10],
+            rowNum: 3,
+            rowList: [3, 10],
             viewrecords: true,
             toolbar: [true, 'top'],
             colNames: ["ID", "章节名", "大小", "时长", "章节url", "操作"],
             colModel: [
-                {name: "id"},
-                {name: "title"},
-                {name: "size"},
-                {name: "duration"},
-                {name: "url"},
+                {name: "id", width: 50, align: "center",},
+                {name: "title", align: "center",},
+                {name: "size", width: 70, align: "center",},
+                {name: "duration", width: 70, align: "center",},
+                {name: "url", align: "center",},
                 {
-                    name: "option", formatter: function (cellValue, options, rowObj) {
-                        return "<a href=\"javascript:void(0)\" onclick=\"playAudio()\" class=\"btn btn-primary\"><span class=\"glyphicon glyphicon-play\"></span> 播放</a>"
+                    name: "option", align: "center",
+                    formatter: function (cellValue, options, rowObj) {
+                        return "<a href='javascript:void(0)' onclick=\"playAudio('" + rowObj.url + "')\" class='btn btn-primary'>" +
+                            "<span class='glyphicon glyphicon-play'></span> 播放</a> " +
+                            "<button class=\"btn btn-danger\" onclick=\"delAudio('" + subGridTableId + "'," + rowObj.id + ")\">" +
+                            "<span class=\"glyphicon glyphicon-edit\"></span> 删除</button>"
                     }
                 },
             ]
         });
         // 在工具栏中添加按钮
-        $('#t_' + subGridTableId).append('<button class="btn btn-primary" onclick="showAddChapter()">添加章节</button>')
+        $('#t_' + subGridTableId).append("<button class=\"btn btn-primary\" onclick=\"showAddChapter(" + albumId + ")\">添加章节</button>")
     }
 
     // 展示添加章节的模态框
-    function showAddChapter() {
+    function showAddChapter(albumId) {
         $("#albumModal").modal('show');
+        // 点击模态框的保存按钮 向后台提交当前的表单信息 保存轮播图
+        $("#save").click(function () {
+            // 通过formdata获取文件的值
+
+            var title = $("#upload_title").val();
+            var status = $("#upload_status").val();
+            var audio = $("#upload_audio")[0].files[0];
+
+            var formData = new FormData();
+
+            formData.append("status", status);
+            formData.append("title", title);
+            formData.append("audio", audio);
+            formData.append("albumId", albumId);
+
+            $.ajax({
+                url: '/album/add_chapter/',
+                type: "post",
+                data: formData,
+                processData: false,     // 使数据不做处理
+                contentType: false,     // 不设置请求头
+                success: function () {
+                    // 根据保存的返回值进行处理
+                    $('#albumModal').modal('hide');
+                    // 刷新jqgrid表格
+                    $('#albumTable').trigger("reloadGrid");
+                }
+            });
+        });
     }
 
     // 播放音频  需要传入当前播放音频的url
     function playAudio(url) {
+        console.log(url);
         // 展示播放框
         $("#playAudioDiv").modal('show');
-        $('#playAudioId').attr("src", "/static/audio/1撕夜.mp3/");
+        $('#playAudioId').attr("src", "/static/" + url);
+    }
+
+    // 删除
+    function delAudio(subTableId, id) {
+        console.log(id, subTableId);
+        $("#" + subTableId).jqGrid("delGridRow", id, {
+            height: 300,
+            reloadAfterSubmit: true
+        })
     }
 
 </script>
@@ -156,7 +205,7 @@
             <!--模态框内容体-->
             <div class="modal-body">
                 <!--模态框内容体-->
-                <form action="" id="bannerForm">
+                <form action="" id="addChapterForm">
                     <div class="modal-body form-horizontal">
                         <div class="form-group ">
                             <label class="col-sm-2 control-label">章节名：</label>
@@ -168,14 +217,16 @@
                         <div class="form-group ">
                             <label class="col-sm-2 control-label">状态：</label>
                             <div class="col-sm-10">
-                                <input type="text" name="status" id="upload_status" class="form-control"
-                                       placeholder="请选择文件状态">
+                                <select name="status" id="upload_status" class="selectpicker show-tick form-control">
+                                    <option value="1">显示</option>
+                                    <option value="0">不显示</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group ">
                             <label class="col-sm-2 control-label">音频：</label>
                             <div class="col-sm-10">
-                                <input type="file" name="pic" id="upload_pic" class="form-control" placeholder="">
+                                <input type="file" name="audio" id="upload_audio" class="form-control" placeholder="">
                             </div>
                         </div>
 
@@ -190,4 +241,5 @@
         </div>
     </div>
 </div>
+
 

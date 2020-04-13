@@ -30,7 +30,7 @@ class TAlbum(models.Model):
     description = models.TextField(blank=True, null=True)
     publish_time = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     status = models.IntegerField(blank=True, null=True)
-    rating = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    rating = models.DecimalField(max_digits=8, decimal_places=1, blank=True, null=True)
 
     class Meta:
         db_table = 't_album'
@@ -38,10 +38,10 @@ class TAlbum(models.Model):
 
 class TAudioChapter(models.Model):
     chapter_name = models.CharField(max_length=50, blank=True, null=True)
-    audio_size = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
-    audio_duration = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
-    audio_url = models.CharField(max_length=100, blank=True, null=True)
-    album_id = models.ForeignKey(TAlbum, models.DO_NOTHING, blank=True, null=True)
+    audio_size = models.CharField(max_length=50, blank=True, null=True)
+    audio_duration = models.CharField(max_length=50, blank=True, null=True)
+    audio_url = models.FileField(upload_to='audio')
+    audio_id =  models.CharField(max_length=100, blank=True, null=True)
     publish_time = models.DateTimeField(blank=True, null=True, auto_now_add=True)
 
     class Meta:
@@ -60,6 +60,7 @@ class TArticle(models.Model):
     article_category = models.IntegerField(blank=True, null=True)
 
     class Meta:
+        managed = False
         db_table = 't_article'
 
 
@@ -67,6 +68,7 @@ class ArticleImg(models.Model):
     img_url = models.ImageField(upload_to='article_img')
 
     class Meta:
+        managed = False
         db_table = "t_article_img"
 
 
@@ -128,4 +130,5 @@ class TUser(models.Model):
     salt = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
+        managed = False
         db_table = 't_user'

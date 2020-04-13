@@ -37,7 +37,7 @@ def getAllAlbum(request):
                 "createDate": u.publish_time.strftime('%Y-%m-%d %H:%M:%S'),
                 "id": u.id,
                 "publishDate": u.publish_time.strftime('%Y-%m-%d %H:%M:%S'),
-                "score": u.rating,
+                "score": '%.1f' % u.rating,
                 "status": u.status,
                 "title": u.album_title,
             }
@@ -97,11 +97,12 @@ def getChapterByAlbumId(request):
     album_Id = request.GET.get('albumId')
     page_num = request.GET.get('page')
     row_num = request.GET.get('rows')
+    print(album_Id, page_num, row_num)
 
     rows = []
-    album = TAudioChapter.objects.all().filter(album_id=album_Id).order_by('id')
+    album = TAudioChapter.objects.all().filter(audio_id=album_Id).order_by('id')
     all_page = Paginator(album, row_num)
-    page = Paginator(album, row_num).page(page_num)
+    page = all_page.page(page_num)
 
     for i in page:
         rows.append(i)
@@ -116,15 +117,55 @@ def getChapterByAlbumId(request):
     def myDefault(u):
         if isinstance(u, TAudioChapter):
             return {
-                "albumId": u.album_id,
+                "albumId": u.audio_id,
                 "createDate": u.publish_time.strftime('%Y-%m-%d %H:%M:%S'),
                 "duration": u.audio_duration,
                 "id": u.id,
                 "size": u.audio_size,
                 "title": u.chapter_name,
-                "url": u.audio_url,
+                "url": str(u.audio_url),
             }
 
     data = json.dumps(page_data, default=myDefault)
 
     return HttpResponse(data)
+
+
+@csrf_exempt
+def add_chapter(request):
+    title = request.POST.get('title')
+    status = request.POST.get('status')
+    audio = request.FILES.get('audio')
+    albumId = request.POST.get("albumId")
+    # 音频大小
+    size = audio.size
+
+    # 音频时长
+    audio_mp3 = MP3(audio)
+    duration = audio_mp3.info.length
+    duration = '%.1f' % duration
+    print(title, status, audio, duration, size, f'albumid:{albumId}', )
+    try:
+        TAudioChapter.objects.create(chapter_name=title,
+                                     audio_url=audio,
+                                     audio_size=size,
+                                     audio_duration=duration,
+                                     audio_id=albumId)
+        print(111)
+    except BaseException as error:
+        print(error)
+
+    return HttpResponse()
+
+
+@csrf_exempt
+def editChapter(request):
+    method = request.POST.get('oper')
+    if method == 'del':
+        id = request.POST.get('id')
+        try:
+            chapter = TAudioChapter.objects.get(id=id)
+            chapter.delete()
+        except BaseException as error:
+            print(error)
+    return HttpResponse()
