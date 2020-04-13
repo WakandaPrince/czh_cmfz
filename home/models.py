@@ -6,6 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from mutagen.mp3 import MP3
 
 
 class TAdmin(models.Model):
@@ -22,17 +23,29 @@ class TAdmin(models.Model):
 
 class TAlbum(models.Model):
     album_title = models.CharField(max_length=50, blank=True, null=True)
-    thumbnail_url = models.CharField(max_length=100, blank=True, null=True)
+    thumbnail_url = models.ImageField(upload_to='album_img')
     author = models.CharField(max_length=50, blank=True, null=True)
     bordcaster = models.CharField(max_length=50, blank=True, null=True)
     chapter_num = models.IntegerField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    publish_time = models.DateTimeField(blank=True, null=True)
+    publish_time = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    status = models.IntegerField(blank=True, null=True)
     rating = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 't_album'
+
+
+class TAudioChapter(models.Model):
+    chapter_name = models.CharField(max_length=50, blank=True, null=True)
+    audio_size = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    audio_duration = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    audio_url = models.CharField(max_length=100, blank=True, null=True)
+    album_id = models.ForeignKey(TAlbum, models.DO_NOTHING, blank=True, null=True)
+    publish_time = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+
+    class Meta:
+        db_table = 't_audio_chapter'
 
 
 class TArticle(models.Model):
@@ -55,18 +68,6 @@ class ArticleImg(models.Model):
 
     class Meta:
         db_table = "t_article_img"
-
-
-class TAudioChapter(models.Model):
-    chapter_name = models.CharField(max_length=50, blank=True, null=True)
-    audio_size = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
-    audio_duration = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
-    audio_url = models.CharField(max_length=100, blank=True, null=True)
-    audio = models.ForeignKey(TAlbum, models.DO_NOTHING, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 't_audio_chapter'
 
 
 class TSlidpic(models.Model):
