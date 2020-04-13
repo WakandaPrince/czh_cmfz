@@ -54,20 +54,23 @@
 
     // 触发添加文章的模态框
     function showAddArticle() {
+
         $('#myModal').modal('show');
-        $("#id_div").css('display', 'none');
         KindEditor.create("#editor_id", {
             allowFileManager: true,
             uploadJson: "/article/upload_img/",
             fileManagerJson: "/article/get_all_img/",
             resizeType: 1,
             // 提交文章内容时必须将富文本框的值同步到 textarea中 否则后台无法获取值
-            afterBlur: function () {
+            afterChange: function () {
                 this.sync()
             }
         });
         $("#modal_footer").html('<button type="button" class="btn btn-primary" onclick="addArticle()">保存</button> ' +
-            '<button class="btn btn-warning" data-dismiss="modal">取消</button>')
+            '<button class="btn btn-warning" data-dismiss="modal">取消</button>');
+        $("#title").val("");
+        console.log($("#editor_id").val());
+        $("#id_div").css('display', 'none');
     }
 
     // 点击保存按钮  进行文章的保存
@@ -103,7 +106,7 @@
             fileManagerJson: "/article/get_all_img/",
             resizeType: 1,
             // 提交文章内容时必须将富文本框的值同步到 textarea中 否则后台无法获取值
-            afterBlur: function () {
+            afterChange: function () {
                 this.sync()
             }
         });
@@ -131,7 +134,7 @@
 
     // 文章修改保存
     function editArticle() {
-
+        console.log($('#editor_id').val());
         var formData = new FormData();
         formData.append('id', $('#article_id').val());
         formData.append("title", $('#title').val());
@@ -182,7 +185,7 @@
     <div id="articlePager" style="width: auto;height: 50px"></div>
 </div>
 
-<div class="modal fade" id="myModal" tabindex="-1">
+<div class="modal fade" id="myModal" >
     <div class="modal-dialog">
         <div class="modal-content" style="width:750px">
             <!--模态框标题-->
