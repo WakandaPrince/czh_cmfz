@@ -3,6 +3,7 @@ from django.urls import path, include
 from rbac import views
 app_name = 'rbac'
 urlpatterns = [
-    # path("upload_img/", views.upload_img,name='upload_img'),
+    path("login/", views.login,name='login'),
+    path("check_user/", views.check_user,name='check_user'),
 
 ]

@@ -76,17 +76,14 @@
             <div id="aa" class="panel-collapse collapse ">
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked">
-                        <li>
-                            <a style="font-weight: bold;"
-                               href="javascript:$('#centerLayout').load('{% static "static_html/user_list.html" %}')">注册用户列表</a>
-                        </li>
-                        <li>
-                            <a style="font-weight: bold;"
-                               href="javascript:$('#centerLayout').load('{% static "static_html/added_user_echart.html" %}')">用户注册趋势</a>
-                        </li>
-                        <li><a style="font-weight: bold;"
-                               href="javascript:$('#centerLayout').load('{% static 'static_html/user_num_map.html' %}')">用户地区分布</a>
-                        </li>
+                        {% for menu in request.session.menu_list %}
+                            {% if menu.sup_menu_id == 1 %}
+                                <li>
+                                    <a style="font-weight: bold;"
+                                       href="javascript:$('#centerLayout').load('/static/static_html'+'{{ menu.url }}')">{{ menu.title }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
@@ -102,10 +99,14 @@
             <div id="bb" class="panel-collapse collapse ">
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked">
-                        <li>
-                            <a style="font-weight: bold;"
-                               href="javascript:$('#centerLayout').load('{% static "static_html/article_kindeditor.html" %}')">添加文章</a>
-                        </li>
+                        {% for menu in request.session.menu_list %}
+                            {% if menu.sup_menu_id == 2 %}
+                                <li>
+                                    <a style="font-weight: bold;"
+                                       href="javascript:$('#centerLayout').load('/static/static_html'+'{{ menu.url }}')">{{ menu.title }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
@@ -122,9 +123,14 @@
             <div id="cc" class="panel-collapse collapse ">
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked">
-                        <li>
-                            <a href="Javascript:$('#centerLayout').load('{% static "static_html/album_chapter.html" %}')">专辑列表</a>
-                        </li>
+                        {% for menu in request.session.menu_list %}
+                            {% if menu.sup_menu_id == 3 %}
+                                <li>
+                                    <a style="font-weight: bold;"
+                                       href="javascript:$('#centerLayout').load('/static/static_html'+'{{ menu.url }}')">{{ menu.title }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
@@ -140,9 +146,14 @@
             <div id="dd" class="panel-collapse collapse ">
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked">
-                        <li>
-                            <a href="Javascript:$('#centerLayout').load('{% static "static_html/banner.html" %}')">轮播图列表</a>
-                        </li>
+                        {% for menu in request.session.menu_list %}
+                            {% if menu.sup_menu_id == 4 %}
+                                <li>
+                                    <a style="font-weight: bold;"
+                                       href="javascript:$('#centerLayout').load('/static/static_html'+'{{ menu.url }}')">{{ menu.title }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
