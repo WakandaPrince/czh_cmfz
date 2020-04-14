@@ -29,7 +29,7 @@
                     editrules: {required: false, number: true, minValue: 1, maxValue: 10}
                 },
                 {
-                    name: "author", align: "center",
+                    name: "author", align: "center", editable: true,
                     editrules: {required: false}
                 },
                 {
@@ -37,7 +37,7 @@
                     editrules: {required: false}
                 },
                 {
-                    name: "count", align: "center", width: 70,
+                    name: "count", align: "center", width: 70, editable: true,
                     editrules: {required: false, number: true, minValue: 1}
                 },
                 {
@@ -55,28 +55,36 @@
                     }
                 },
                 {
-                    name: "publishDate", edittype: "date", align: "center",
+                    name: "publishDate", edittype: "date", align: "center", editable: true,
                     editrules: {required: false}
                 },
                 {
-                    name: "createDate", edittype: "date", align: "center",
+                    name: "createDate", edittype: "date", align: "center", editable: true,
                     editrules: {required: false}
                 },
                 {
-                    name: "cover", edittype: "file", align: "center",
+                    name: "cover", edittype: "file", align: "center", editable: true,
                     editoptions: {
                         enctype: "multipart/form-data"
                     },
                     formatter: function (cellvalue, options, rowObject) {
                         return "<img style='height: 80px;width: 180px' src='/static/upload/" + cellvalue + " '/>"
-                    }
+                    },
                 }
             ],
 
         }).jqGrid("navGrid", "#albumPager", {
                 add: true, edit: true, del: true, search: true, refresh: true, edittext: "编辑", addtext: "添加", deltext: "删除"
+            }, {
+                closeAfterEdit: true,
+                beforeShowForm: function (form) {
+                    form.find("#publishDate").attr("readOnly", true);
+                    form.find("#createDate").attr("readOnly", true);
+                    form.find("#cover").attr("disabled", true);
+                }
             },
-        )
+        );
+
     });
 
     // 完成二级表格的方法

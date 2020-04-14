@@ -66,8 +66,8 @@ def editAlbum(request):
           f'评分:{score} 状态：{status} 标题：{title}')
     if method == 'add':
         try:
-            TAlbum.objects.create(album_title=title, author=author, bordcaster=broadcast, chapter_num=count,
-                                  description=brief, rating=score, status=status)
+            # TAlbum.objects.create(album_title=title, author=author, bordcaster=broadcast, chapter_num=count,
+            #                       description=brief, rating=score, status=status)
             return JsonResponse({'status': 1, 'msg': f'添加成功！'})
         except BaseException as error:
             return JsonResponse({'status': 0, 'msg': f'添加失败！{error}'})
