@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse, redirect
 
 from rbac.models import *
@@ -12,13 +13,10 @@ def check_user(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     print(username, password)
-    user = UserInfo.objects.get(name=username, password=password)
-    print(user)
-    if not user:
-        return render(request, "login_form.html", {'msg': "用户名或密码错误"})
-
+    try:
+        user = UserInfo.objects.get(name=username, password=password)
         # 处理权限相关的业务
-    init_permission(user, request)
-
-    return redirect("home_index")
-
+        init_permission(user, request)
+        return JsonResponse({'status': 1})
+    except BaseException as error:
+        return JsonResponse({'status': 0, 'msg': f'用户名或密码错误{error}'})

@@ -10,14 +10,6 @@
     <script src="{% static 'boot/js/bootstrap.min.js' %}"></script>
 </head>
 <body>
-<!--
-<form action="{% url 'rbac:check_user' %}" method="post">
-    {% csrf_token %}
-    用户名：<input type="text" name="username"><br>
-    密码：<input type="text" name="password"><br>
-    <input type="submit" value="登录"><br>
-</form>
--->
 <br><br><br>
 <div class="container">
     <div class="form-group">
@@ -26,21 +18,39 @@
                 {% csrf_token %}
                 <label for="mobile" class="">用户名:</label>
                 <div class="input-group m-bot15" style="width: 300px">
-                    <input type="text" class="form-control" required  name="username">
+                    <input type="text" class="form-control" required id="username" name="username">
 
                 </div>
                 <br>
                 <label for="basic-url" class="">密码：</label>
                 <div class="input-group" style="width: 300px">
-                    <input type="password" class="form-control"  required name="password">
+                    <input type="password" class="form-control" required id="password" name="password">
                 </div>
                 <br>
                 <div class="input-group">
-                    <input class="btn btn-success" type="submit" id="loginButtonId" value="登录">
+                    <button class="btn btn-success" id="loginButtonId" value="登录" onclick="check_username()">登陆</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<script>
+    function check_username() {
+        $.ajax({
+            type: "POST",
+            url: "{% url "rbac:check_user" %}",
+            data: $("#loginForm").serialize(),
+            success: function (data) {
+                if (data.status === 1) {
+                    location.href = '{% url 'home_index' %}'
+                } else {
+                    alert(data.msg);
+                    location.reload()
+                }
+            }
+        });
+
+    }
+</script>
 </body>
 </html>

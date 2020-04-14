@@ -1,6 +1,6 @@
 import re
 
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.utils.deprecation import MiddlewareMixin
 
 
