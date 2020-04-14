@@ -3,16 +3,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>持名法州后台管理系统登陆</title>
+    <link rel="stylesheet" href="{% static 'boot/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'jqgrid/css/trirand/ui.jqgrid-bootstrap.css' %}">
+    <script src="{% static 'boot/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'boot/js/bootstrap.min.js' %}"></script>
 </head>
 <body>
-
+<!--
 <form action="{% url 'rbac:check_user' %}" method="post">
     {% csrf_token %}
     用户名：<input type="text" name="username"><br>
     密码：<input type="text" name="password"><br>
     <input type="submit" value="登录"><br>
 </form>
+-->
+<br><br><br>
+<div class="container">
+    <div class="form-group">
+        <div class="col-lg-10">
+            <form id="loginForm" role="form" action="{% url 'rbac:check_user' %}" method="post" class="form-horizontal">
+                {% csrf_token %}
+                <label for="mobile" class="">用户名:</label>
+                <div class="input-group m-bot15" style="width: 300px">
+                    <input type="text" class="form-control" required  name="username">
 
+                </div>
+                <br>
+                <label for="basic-url" class="">密码：</label>
+                <div class="input-group" style="width: 300px">
+                    <input type="password" class="form-control"  required name="password">
+                </div>
+                <br>
+                <div class="input-group">
+                    <input class="btn btn-success" type="submit" id="loginButtonId" value="登录">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>

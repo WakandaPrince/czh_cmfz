@@ -22,5 +22,5 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('article/', include('article.urls')),
     path('album/', include('album.urls')),
-    path('rbac/', include('rbac.urls')),
+    path('', include('rbac.urls')),
 ]

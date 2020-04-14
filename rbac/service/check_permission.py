@@ -21,8 +21,8 @@ class CheckPermission(MiddlewareMixin):
 
         # 对于不需要拦截的url设置白名单
         valid_url_list = [
-            '/rbac/login/',
-            '/rbac/check_user/',
+            '/login/',
+            '/check_user/',
             '/admin/.*',
         ]
 
