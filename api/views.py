@@ -1,5 +1,10 @@
+import hashlib
+import random
+
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+
 from home.models import *
 
 
@@ -134,3 +139,35 @@ def wen(request):
         })
     except BaseException as error:
         return HttpResponse(f'查询错误{error}')
+
+
+@csrf_exempt
+def register(request):
+    """
+    注册接口
+    :param request:phone,password
+    :return:id,加密后密码,手机号
+    """
+    try:
+        phone = request.POST.get('phone')
+        password = request.POST.get('password')
+        print(phone, password)
+        user = TUser.objects.filter(phone=phone)
+        if user:
+            return JsonResponse({
+                "error": "-200",
+                "error_msg": "该手机号已经存在"
+            })
+        else:
+            salt = str(random.randint(1000, 9999))
+            sha = hashlib.sha1()
+            sha.update((password + salt).encode())
+            password = sha.hexdigest()
+            print(password)
+            return JsonResponse({
+                "password": password,
+                "uid": salt,
+                "phone ": phone,
+            })
+    except BaseException as error:
+        return HttpResponse(f'添加账户失败{error}')
