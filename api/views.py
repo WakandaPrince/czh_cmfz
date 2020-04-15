@@ -171,3 +171,50 @@ def register(request):
             })
     except BaseException as error:
         return HttpResponse(f'添加账户失败{error}')
+
+
+@csrf_exempt
+def modify(request):
+    """
+    修改个人信息接口
+    :param request:phone,password
+    :return:id,加密后密码,手机号
+    """
+    try:
+        uid = request.POST.get('uid')
+        gender = request.POST.get('gender')
+        photo = request.FILES.get('photo')
+        location = request.POST.get('location')
+        description = request.POST.get('description')
+        nickname = request.POST.get('nickname')
+        province = request.POST.get('province')
+        city = request.POST.get('city')
+        password = request.POST.get('password')
+        try:
+            user = TUser.objects.get(user_id=uid)
+            salt = str(random.randint(1000, 9999))
+            sha = hashlib.sha1()
+            sha.update((password + salt).encode())
+            password = sha.hexdigest()
+            print(password)
+            return JsonResponse({
+                "password": password,  # MD5后的密码
+                "farmington": nickname,  # 法名
+                "uid": salt,  # 用户id
+                "nickname": nickname,  # 昵称
+                "gender": gender,  # 性别（m：男 f：女）
+                "photo": "userthumbnail/" + str(photo),  # 头像
+                "location": location,  # 所在地
+                "province": province,  # 省市
+                "city": city,  # 地区
+                "description": description,  # 个人签名
+                "phone ": user.phone  # 手机号
+            })
+
+        except BaseException as error:
+            return JsonResponse({
+                "error": "-200",
+                "error_msg": f"该用户不存在{error}"
+            })
+    except BaseException as error:
+        return HttpResponse(f'添加账户失败{error}')
