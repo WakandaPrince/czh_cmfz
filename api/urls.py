@@ -4,7 +4,7 @@ from api import views
 app_name = 'api'
 urlpatterns = [
     path("first_page/", views.first_page, name='first_page'),
-    # path("wen/", views.wen),
+    path("wen/", views.wen, name='wen'),
     # path("regist/", views.regist),
     # path("modify/", views.modify),
 ]
