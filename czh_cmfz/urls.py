@@ -23,5 +23,5 @@ urlpatterns = [
     path('article/', include('article.urls')),
     path('album/', include('album.urls')),
     path('', include('rbac.urls')),
-    path('api', include('api.urls')),
+    path('api/', include('api.urls')),
 ]

@@ -24,6 +24,7 @@ class CheckPermission(MiddlewareMixin):
             '/login/',
             '/check_user/',
             '/admin/.*',
+            '/api/.*'
         ]
 
         # 当前访问的url
