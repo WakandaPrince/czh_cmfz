@@ -17,6 +17,8 @@ def check_user(request):
         user = UserInfo.objects.get(name=username, password=password)
         # 处理权限相关的业务
         init_permission(user, request)
+
         return JsonResponse({'status': 1})
+
     except BaseException as error:
         return JsonResponse({'status': 0, 'msg': f'用户名或密码错误{error}'})

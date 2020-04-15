@@ -40,7 +40,7 @@ class CheckPermission(MiddlewareMixin):
 
         # 需要使用正则来进行匹配
         for url in per_list:
-            if url == current_url:
+            if re.match(url, current_url):
                 return None
 
         return HttpResponse("无权访问")
