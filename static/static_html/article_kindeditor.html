@@ -134,7 +134,6 @@
 
     // 文章修改保存
     function editArticle() {
-        console.log($('#editor_id').val());
         var formData = new FormData();
         formData.append('id', $('#article_id').val());
         formData.append("title", $('#title').val());
@@ -171,7 +170,9 @@
 
     }
 </script>
-
+<div class="page-header">
+    <h2>文章管理</h2>
+</div>
 <ul class="nav nav-tabs">
     <li class="active"><a href="#" style="font-weight: bold">文章信息</a></li>
     <li><a style="font-weight: bold" onclick="showAddArticle();">添加文章</a></li>

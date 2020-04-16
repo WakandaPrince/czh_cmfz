@@ -12,7 +12,7 @@
             rowList: [3, 5, 10],
             viewrecords: true,
             editurl: "/slidpic/edit_banner/",
-            colNames: ["ID", "描述", "是否显示","上传时间",  "图片", "操作"],
+            colNames: ["ID", "描述", "是否显示", "上传时间", "图片", "操作"],
             colModel: [
                 {name: "id", align: "center", width: 50},
                 {name: "title", align: "center", editable: true},
@@ -33,8 +33,7 @@
                 {
                     name: 'option', align: 'center', width: 439,
                     formatter: function (cellValue, options, row) {
-                        return "<button class=\"btn btn-primary\" data-aa=\"@456\" data-whatever=\"@123\" id=\"btn\" data-toggle=\"modal\" data-target=\"#bannerModal\"><span class=\"glyphicon glyphicon-edit\"></span> 添加</button> " +
-                        "<button class=\"btn btn-warning\" id=\"edit\" onclick=\"edit(" + row.id + ")\"><span class=\"glyphicon glyphicon-edit\"></span> 修改</button> " +
+                        return "<button class=\"btn btn-warning\" id=\"edit\" onclick=\"edit(" + row.id + ")\"><span class=\"glyphicon glyphicon-edit\"></span> 修改</button> " +
                         "<button class=\"btn btn-danger\" id=\"edit\" onclick=\"del(" + row.id + ")\"><span class=\"glyphicon glyphicon-edit\"></span> 删除</button>"
 
                     }
@@ -81,6 +80,7 @@
 </div>
 <ul class="nav nav-tabs ">
     <li class="active"><a href="#"><b>轮播图信息</b></a></li>
+    <li><a href="javascript:void(0)" data-toggle="modal" data-target="#bannerModal"><b>添加轮播图</b></a></li>
 </ul>
 
 <div class="panel panel-default" style="padding: 40px">
@@ -125,7 +125,7 @@
             </div>
 
             <!--模态框内容体-->
-            <div class="modal-body" >
+            <div class="modal-body">
                 <!--模态框内容体-->
                 <form action="" id="bannerForm">
                     <div class="modal-body form-horizontal">

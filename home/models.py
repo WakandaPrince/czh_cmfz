@@ -119,7 +119,7 @@ class TUser(models.Model):
     user_id = models.IntegerField(primary_key=True)
     username = models.CharField(max_length=50, blank=True, null=True)
     password = models.CharField(max_length=50, blank=True, null=True)
-    register_time = models.DateTimeField(auto_now_add=False)
+    register_time = models.DateTimeField(auto_now_add=True)
     thumbnail_url = models.ImageField(upload_to='userthumbnail')
     user_info = models.CharField(max_length=100, blank=True, null=True)
     nickname = models.CharField(max_length=50, blank=True, null=True)
