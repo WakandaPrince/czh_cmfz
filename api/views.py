@@ -199,7 +199,7 @@ def modify(request):
             print(password)
             return JsonResponse({
                 "password": password,  # MD5后的密码
-                "farmington": nickname,  # 法名
+                "farmington": user.nickname,  # 法名
                 "uid": salt,  # 用户id
                 "nickname": nickname,  # 昵称
                 "gender": gender,  # 性别（m：男 f：女）

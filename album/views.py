@@ -33,7 +33,7 @@ def getAllAlbum(request):
                 "brief": u.description,
                 "broadcast": u.bordcaster,
                 "count": u.chapter_num,
-                "cover": u.thumbnail_url,
+                "cover": str(u.thumbnail_url),
                 "createDate": u.publish_time.strftime('%Y-%m-%d %H:%M:%S'),
                 "id": u.id,
                 "publishDate": u.publish_time.strftime('%Y-%m-%d %H:%M:%S'),
@@ -45,6 +45,23 @@ def getAllAlbum(request):
     data = json.dumps(page_data, default=myDefault)
 
     return HttpResponse(data)
+
+
+@csrf_exempt
+def addAlbum(request):
+    author = request.POST.get("author")
+    broadcast = request.POST.get("broadcast")
+    cover = request.FILES.get("cover")
+    score = request.POST.get("score")
+    title = request.POST.get("title")
+    print(f'作者：{author}播音员:{broadcast}封面：{cover}'
+          f'评分:{score}  标题：{title}')
+
+    try:
+        TAlbum.objects.create(album_title=title, author=author, bordcaster=broadcast, rating=score, thumbnail_url=cover)
+        return JsonResponse({'status': 1, 'msg': f'添加成功！'})
+    except BaseException as error:
+        return JsonResponse({'status': 0, 'msg': f'添加失败！{error}'})
 
 
 @csrf_exempt
@@ -64,14 +81,8 @@ def editAlbum(request):
     title = request.POST.get("title")
     print(f'id: {id} 作者：{author}简介：{brief}播音员:{broadcast}章节数量:{count} 封面：{cover} 创建日期{create_date} 发布日期{publish_date}'
           f'评分:{score} 状态：{status} 标题：{title}')
-    if method == 'add':
-        try:
-            # TAlbum.objects.create(album_title=title, author=author, bordcaster=broadcast, chapter_num=count,
-            #                       description=brief, rating=score, status=status)
-            return JsonResponse({'status': 1, 'msg': f'添加成功！'})
-        except BaseException as error:
-            return JsonResponse({'status': 0, 'msg': f'添加失败！{error}'})
-    elif method == 'edit':
+
+    if method == 'edit':
         try:
             album = TAlbum.objects.get(id=id)
             album.album_title = title
@@ -79,6 +90,7 @@ def editAlbum(request):
             album.bordcaster = broadcast
             album.description = brief
             album.status = status
+            album.chapter_num = count
             album.save()
             return JsonResponse({'status': 1, 'msg': f'修改成功！'})
         except BaseException as error:

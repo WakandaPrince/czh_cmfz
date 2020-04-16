@@ -1,6 +1,7 @@
 import re
 
 from django.http import HttpResponse,JsonResponse
+from django.shortcuts import render
 from django.utils.deprecation import MiddlewareMixin
 
 
@@ -37,11 +38,11 @@ class CheckPermission(MiddlewareMixin):
                 return None
 
         if not per_list:
-            return HttpResponse("请登录")
+            return render(request, 'login_form.html')
 
         # 需要使用正则来进行匹配
         for url in per_list:
             if re.match(url, current_url):
                 return None
 
-        return HttpResponse("无权访问")
+        return render(request, 'login_form.html')
